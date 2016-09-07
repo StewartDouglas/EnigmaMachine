@@ -1,26 +1,19 @@
-enigma: main.o enigmamachine.o component.o plugboard.o reflector.o rotor.o enigma.o
-	g++ -Wall -g main.o enigma.o enigmamachine.o component.o plugboard.o reflector.o rotor.o  -o enigma
+CC = g++
+#  -g    adds debugging information to the executable file
+#  -Wall turns on most, but not all, compiler warnings
+CFLAGS = -Wall -g
+OBJ = main.o enigmamachine.o component.o plugboard.o reflector.o rotor.o enigma.o
 
-main.o: main.cpp enigma.h enigmamachine.h plugboard.h reflector.h rotor.h
-	g++ -Wall -g -c main.cpp
+# Link all object files to form target file.
+# We use the following automatic variables:
+# $@ is the name of the target of the rule (enigma)
+# $^ is a list of all the dependencies
+enigma: $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $^
 
-enigma.o: enigma.cpp enigma.h 
-	g++ -Wall -g -c enigma.cpp
-
-enigmamachine.o: enigmamachine.cpp plugboard.h reflector.h rotor.h enigma.h
-	g++ -Wall -g -c enigmamachine.cpp 
-
-component.o: component.cpp component.h enigma.h
-	g++ -Wall -g -c component.cpp
-
-plugboard.o: plugboard.cpp plugboard.h component.h
-	g++ -Wall -g -c plugboard.cpp
-
-reflector.o: reflector.cpp reflector.h component.h
-	g++ -Wall -g -c reflector.cpp
-
-rotor.o: rotor.cpp rotor.h component.h
-	g++ -Wall -g -c rotor.cpp
+# Compile
+%.o: %.c
+	g++ $(CFLAGS) -c $*.c -o $*.o
 
 clean:
 	rm -f enigma *.o
